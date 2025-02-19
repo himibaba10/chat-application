@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { getUsers } = require("../controller/usersController");
+const { getUsers, addUser } = require("../controller/usersController");
 const decorativeHtmlResponse = require("../middlewares/common/decorativeHtmlResponse");
 const avatarUploader = require("../middlewares/users/avatarUploader");
 const {
@@ -16,7 +16,8 @@ usersRouter.post(
   "/",
   avatarUploader,
   addUserValidators,
-  addUserValidationHandler
+  addUserValidationHandler,
+  addUser
 );
 
 module.exports = usersRouter;
