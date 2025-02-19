@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { getLogin } = require("../controller/loginController");
-const decorativeHtmlResponse = require("../middlewares/decorativeHtmlResponse");
+const decorativeHtmlResponse = require("../middlewares/common/decorativeHtmlResponse");
 
 const loginRouter = Router();
 

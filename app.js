@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const {
   notFoundHandler,
   errorHandler,
-} = require("./middlewares/errorHandlers");
+} = require("./middlewares/common/errorHandlers");
 const loginRouter = require("./router/loginRouter");
 const usersRouter = require("./router/usersRouter");
 const inboxRouter = require("./router/inboxRouter");
