@@ -1,6 +1,6 @@
 <div class="modal-wrapper" id="add-user-modal">
   <div class="modal">
-    <a href="#" onclick="closeModal()" class="modal-close">+</a>
+    <a href="#" onclick="closeModal()" class="modal-close">x</a>
     <div class="modal-title">
       <h2>Create New User</h2>
     </div>
@@ -11,16 +11,21 @@
         enctype="multipart/form-data"
         id="add-user-form"
       >
-        <input type="text" placeholder="enter name" name="name" />
+        <input type="text" placeholder="enter name" name="name" required />
         <p class="error name"></p>
 
-        <input type="text" placeholder="enter email" name="email" />
+        <input type="text" placeholder="enter email" name="email" required />
         <p class="error email"></p>
 
-        <input type="text" placeholder="enter mobile" name="mobile" />
+        <input type="text" placeholder="enter mobile" name="mobile" required />
         <p class="error mobile"></p>
 
-        <input type="password" placeholder="enter password" name="password" />
+        <input
+          type="password"
+          placeholder="enter password"
+          name="password"
+          required
+        />
         <p class="error password"></p>
 
         <input type="file" name="avatar" />
@@ -48,47 +53,51 @@
     duration: 1000,
   });
 
-  addUserForm.onsubmit = (e) => {
+  addUserForm.onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(addUserForm);
 
-    fetch("/users", { method: "POST", body: formData })
-      .then((res) => res.json())
-      .then((data) => {
-        // Cleaning previous errors(if any)
-        clearErrors();
-
-        if (data.errors && Object.keys(data.errors).length > 0) {
-          // showing errors
-          showErrorsToUI(data.errors);
-        } else {
-          // Success!
-          successToast.showToast();
-          closeModal();
-
-          // Reload the page after 1 second
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const response = await fetch("/users", {
+        method: "POST",
+        body: formData,
       });
+      const data = await response.json();
 
-    const clearErrors = () => {
-      addUserForm.querySelectorAll("p.error").forEach((field) => {
-        field.style.display = "none";
-        field.innerText = "";
-      });
-    };
+      clearErrors();
 
-    const showErrorsToUI = (errors) => {
-      for (let key in errors) {
-        const errorField = addUserForm.querySelector(`p.error.${key}`);
-        errorField.style.display = "block";
-        errorField.innerText = errors[key].msg;
+      if (data.errors && Object.keys(data.errors).length > 0) {
+        // show error in UI
+        showErrorsToUI(data.errors);
+      } else {
+        // Success!
+        successToast.showToast();
+        closeModal();
+
+        // Reload the page after 1 second
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
       }
-    };
+    } catch (err) {
+      console.error(err);
+      document.querySelector("p.error.common").innerText =
+        "Something went wrong!";
+    }
+  };
+
+  const clearErrors = () => {
+    addUserForm.querySelectorAll("p.error").forEach((field) => {
+      field.style.display = "none";
+      field.innerText = "";
+    });
+  };
+
+  const showErrorsToUI = (errors) => {
+    for (let key in errors) {
+      const errorField = addUserForm.querySelector(`p.error.${key}`);
+      errorField.style.display = "block";
+      errorField.innerText = errors[key].msg;
+    }
   };
 </script>
