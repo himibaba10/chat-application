@@ -3,7 +3,7 @@ const multer = require("multer");
 const createError = require("http-errors");
 
 const uploader = ({ folderPath, allowedFileTypes, maxFileSize, errorMsg }) => {
-  const uploadFolder = path.join(__dirname, "..", "public", folderPath);
+  const uploadFolder = path.join(__dirname, "../public/uploads", folderPath);
 
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {

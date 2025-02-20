@@ -24,7 +24,9 @@
         <p class="error password"></p>
 
         <input type="file" name="avatar" />
-        <p class="error"></p>
+        <p class="error avatar"></p>
+
+        <p class="error common"></p>
 
         <input type="submit" value="Submit" />
       </form>
@@ -41,6 +43,11 @@
     modal.style.display = "block";
   }
 
+  const successToast = Toastify({
+    text: "User was added successfully! Reloading the list...",
+    duration: 1000,
+  });
+
   addUserForm.onsubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(addUserForm);
@@ -51,18 +58,25 @@
         // Cleaning previous errors(if any)
         clearErrors();
 
-        if (data.errors) {
+        if (data.errors && Object.keys(data.errors).length > 0) {
           // showing errors
           showErrorsToUI(data.errors);
         } else {
           // Success!
+          successToast.showToast();
+          closeModal();
+
+          // Reload the page after 1 second
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
         }
       })
       .catch((err) => {
         console.log(err);
       });
 
-    const cleanErrors = () => {
+    const clearErrors = () => {
       addUserForm.querySelectorAll("p.error").forEach((field) => {
         field.style.display = "none";
         field.innerText = "";

@@ -4,7 +4,7 @@ function avatarUploader(req, res, next) {
   const upload = uploader({
     folderPath: "avatars",
     allowedFileTypes: ["image/jpg", "image/jpeg", "image/png"],
-    maxFileSize: 100000,
+    maxFileSize: 1000000,
     errorMsg: "Only .jpg, .jpeg or .png format is allowed.",
   });
 

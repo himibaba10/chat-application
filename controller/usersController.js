@@ -6,7 +6,6 @@ const getUsers = (req, res) => {
 };
 
 const addUser = async (req, res) => {
-  console.log(req.body);
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -24,7 +23,7 @@ const addUser = async (req, res) => {
   }
 
   try {
-    const result = await newUser.save();
+    await newUser.save();
     res.status(200).json({
       message: "User was added successfully!",
     });
