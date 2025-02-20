@@ -6,22 +6,22 @@
     </div>
     <div class="modal-body">
       <form
-        method="post"
         action="/users"
+        method="post"
         enctype="multipart/form-data"
         id="add-user-form"
       >
         <input type="text" placeholder="enter name" name="name" />
-        <p class="error"></p>
+        <p class="error name"></p>
 
         <input type="text" placeholder="enter email" name="email" />
-        <p class="error"></p>
+        <p class="error email"></p>
 
         <input type="text" placeholder="enter mobile" name="mobile" />
-        <p class="error"></p>
+        <p class="error mobile"></p>
 
         <input type="password" placeholder="enter password" name="password" />
-        <p class="error"></p>
+        <p class="error password"></p>
 
         <input type="file" name="avatar" />
         <p class="error"></p>
@@ -33,10 +33,48 @@
 </div>
 <script>
   const modal = document.querySelector("#add-user-modal");
+  const addUserForm = document.querySelector("#add-user-form");
   function closeModal() {
     modal.style.display = "none";
   }
   function openModal() {
     modal.style.display = "block";
   }
+
+  addUserForm.onsubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(addUserForm);
+
+    fetch("/users", { method: "POST", body: formData })
+      .then((res) => res.json())
+      .then((data) => {
+        // Cleaning previous errors(if any)
+        clearErrors();
+
+        if (data.errors) {
+          // showing errors
+          showErrorsToUI(data.errors);
+        } else {
+          // Success!
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const cleanErrors = () => {
+      addUserForm.querySelectorAll("p.error").forEach((field) => {
+        field.style.display = "none";
+        field.innerText = "";
+      });
+    };
+
+    const showErrorsToUI = (errors) => {
+      for (let key in errors) {
+        const errorField = addUserForm.querySelector(`p.error.${key}`);
+        errorField.style.display = "block";
+        errorField.innerText = errors[key].msg;
+      }
+    };
+  };
 </script>
