@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
-const getUsers = (req, res) => {
+const getUsers = async (req, res) => {
+  const users = await User.find({});
+  res.locals.users = users;
   res.render("users");
 };
 

@@ -4,6 +4,8 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const getLogin = (req, res) => {
+  if (req.loggedInUser?.name) return res.redirect("/inbox");
+
   res.render("index", { errors: null, data: null });
 };
 
@@ -40,7 +42,7 @@ const postLogin = async (req, res, next) => {
       });
 
       // Set cookie
-      res.cookie("chat-app-token", token, {
+      res.cookie(process.env.COOKIE_NAME, token, {
         maxAge: 86400000,
         httpOnly: true,
         signed: true, //for encription
@@ -50,7 +52,7 @@ const postLogin = async (req, res, next) => {
       res.locals.loggedInUser = userInfo;
 
       // All done! Redirect user to inbox page
-      res.render("inbox");
+      res.redirect("/inbox");
     }
   } catch (error) {
     res.render("index", {
@@ -66,4 +68,9 @@ const postLogin = async (req, res, next) => {
   }
 };
 
-module.exports = { getLogin, postLogin };
+const postLogout = (req, res) => {
+  res.clearCookie(process.env.COOKIE_NAME);
+  res.send("Logged out.");
+};
+
+module.exports = { getLogin, postLogin, postLogout };

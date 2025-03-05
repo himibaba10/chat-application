@@ -4,6 +4,8 @@ const decorativeHtmlResponse = (pageTitle) => {
     res.locals.title = `${pageTitle} - ${process.env.APP_NAME}`;
     res.locals.errors = {};
     res.locals.data = {};
+    res.locals.loggedInUser = {};
+    res.locals.users = [];
     next();
   };
 };

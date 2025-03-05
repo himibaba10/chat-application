@@ -6,11 +6,12 @@ const {
   addUserValidators,
   addUserValidationHandler,
 } = require("../middlewares/users/userValidators");
+const authChecker = require("../middlewares/common/authChecker");
 
 const usersRouter = Router();
 
 // Login page
-usersRouter.get("/", decorativeHtmlResponse("Users"), getUsers);
+usersRouter.get("/", decorativeHtmlResponse("Users"), authChecker, getUsers);
 
 usersRouter.post(
   "/",
