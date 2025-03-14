@@ -2,9 +2,13 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 const getUsers = async (req, res) => {
-  const users = await User.find({});
-  res.locals.users = users;
-  res.render("users");
+  try {
+    const users = await User.find({});
+    res.locals.users = users;
+    res.render("users");
+  } catch (error) {
+    next(error);
+  }
 };
 
 const addUser = async (req, res) => {
@@ -40,4 +44,15 @@ const addUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, addUser };
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await User.findByIdAndDelete(id);
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getUsers, addUser, deleteUser };
