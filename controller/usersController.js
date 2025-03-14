@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const removeAvatar = require("../utils/removeAvatar");
 
 const getUsers = async (req, res) => {
   try {
@@ -49,6 +50,9 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     const result = await User.findByIdAndDelete(id);
+
+    removeAvatar(result?.avatar);
+
     res.status(200).send(result);
   } catch (error) {
     next(error);

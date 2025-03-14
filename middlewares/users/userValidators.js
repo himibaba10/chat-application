@@ -3,6 +3,7 @@ const User = require("../../models/User");
 const createError = require("http-errors");
 const path = require("path");
 const fs = require("fs");
+const removeAvatar = require("../../utils/removeAvatar");
 
 const addUserValidators = [
   check("name")
@@ -55,12 +56,7 @@ const addUserValidationHandler = (req, res, next) => {
     // Remove uploaded files
     if (req.files.length > 0) {
       const { fileName } = req.files[0];
-      fs.unlink(
-        path.join(__dirname, `../../public/uploads/avatars/${fileName}`),
-        (err) => {
-          if (err) console.log(err);
-        }
-      );
+      removeAvatar(fileName);
     }
 
     // Error response
