@@ -38,15 +38,27 @@
 
     <%- include("./partials/add-user-modal.ejs") %>
     <script>
+      const deleteToast = Toastify({
+        text: "User was deleted successfully",
+        duration: 3000
+      });
+
+      const deleteErrorToast = Toastify({
+        text: "Could not delete the user",
+        duration: 3000
+      });
+
       const deleteUser = (id) => {
         fetch(`/users/${id}`, {method: "DELETE"})
         .then(res => res.json())
         .then(()=>{
           const deletedUser = document.getElementById(id);
           deletedUser.remove();
+          deleteToast.showToast();
         })
         .catch(err => {
           console.log(err);
+          deleteErrorToast.showToast()
         })
       }
     </script>
